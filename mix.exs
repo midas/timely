@@ -3,7 +3,7 @@ defmodule Timely.Mixfile do
 
   def project do
     [app: :timely,
-     version: "0.1.0",
+     version: "0.2.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -31,7 +31,7 @@ defmodule Timely.Mixfile do
       licenses: ["MIT"],
       links: %{
         "GitHub" => "https://github.com/midas/timely",
-        "Docs"   => "https://hexdocs.pm/timely/0.1.0"
+        "Docs"   => "https://hexdocs.pm/timely/0.2.0"
       }
     ]
   end
