@@ -341,8 +341,8 @@ defmodule Timely do
 
   def from_now(dt \\ utc(), units, scale) do
     case units do
-      :seconds -> Timex.shift(dt, secs: scale)
-      :minutes -> Timex.shift(dt, mins: scale)
+      :seconds -> Timex.shift(dt, seconds: scale)
+      :minutes -> Timex.shift(dt, minutes: scale)
       :hours   -> Timex.shift(dt, hours: scale)
       :days    -> Timex.shift(dt, days: scale)
       :months  -> Timex.shift(dt, months: scale)
