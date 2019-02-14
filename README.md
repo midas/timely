@@ -10,6 +10,6 @@ by adding `timely` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:timely, "~> 0.1.0"}]
+  [{:timely, "~> 1.0.0"}]
 end
 ```
