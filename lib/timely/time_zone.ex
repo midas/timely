@@ -1,4 +1,7 @@
 defmodule Timely.TimeZone do
+  @moduledoc """
+  Provides time zone convenience functions.
+  """
 
   def list do
       [
