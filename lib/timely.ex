@@ -13,7 +13,7 @@ defmodule Timely do
   """
   @type time_zone :: binary
 
-  @type date_or_time_like :: Date.t | DateTime.t | NaiveDateTime.t | Ecto.Date.t | Ecto.DateTime.t | String.t
+  @type date_or_time_like :: Date.t | DateTime.t | NaiveDateTime.t | String.t
 
   @typedoc """
   A known spec or a format string.
@@ -235,36 +235,6 @@ defmodule Timely do
     |> as(format_or_spec)
   end
 
-  def as(%Ecto.Date{year: year, month: month, day: day}, :date_tuple),     do: {year, month, day}
-  def as(%Ecto.Date{year: year, month: month, day: day}, :datetime_tuple), do: {{year, month, day}, {0, 0, 0}}
-  def as(%Ecto.Date{} = dt, :ecto_date),                                   do: dt
-
-  def as(%Ecto.Date{year: year, month: month, day: day}, :ecto_datetime) do
-    %Ecto.DateTime{year: year, month: month, day: day, hour: 0, min: 0, sec: 0}
-  end
-
-  def as(%Ecto.Date{} = dt, :date),         do: Ecto.Date.to_erl(dt) |> Date.from_erl() |> process_result_tuple()
-  def as(%Ecto.Date{} = dt, :datetime),     do: new_datetime({Ecto.Date.to_erl(dt), {0, 0, 0}}, @zero_microseconds)
-  def as(%Ecto.Date{} = dt, :iso8601),      do: as(dt, :datetime) |> as(:iso8601)
-  def as(%Ecto.Date{} = dt, :iso8601_date), do: as(dt, :date) |> as(:iso8601_date)
-  def as(%Ecto.Date{} = dt, :iso8601_z),    do: as(dt, :date) |> as(:iso8601_z)
-  def as(%Ecto.Date{} = dt, :rfc1123),      do: as(dt, :date) |> as(:rfc1123)
-  def as(%Ecto.Date{} = dt, spec),          do:  as(dt, :date) |> as(spec)
-
-  def as(%Ecto.DateTime{year: year, month: month, day: day}, :date_tuple),                                     do: {year, month, day}
-  def as(%Ecto.DateTime{year: year, month: month, day: day, hour: hour, min: min, sec: sec}, :datetime_tuple), do: {{year, month, day}, {hour, min, sec}}
-
-  def as(%Ecto.DateTime{} = dt, :ecto_date),     do: Ecto.Date.cast!(dt)
-  def as(%Ecto.DateTime{} = dt, :ecto_datetime), do: dt
-  def as(%Ecto.DateTime{} = dt, :date),          do: Ecto.DateTime.to_date(dt) |> Ecto.Date.to_erl |> as(:date)
-  def as(%Ecto.DateTime{} = dt, :datetime),      do: new_datetime(Ecto.DateTime.to_erl(dt), @zero_microseconds)
-  def as(%Ecto.DateTime{} = dt, :iso8601),       do: Ecto.DateTime.to_erl(dt) |> as(:iso8601)
-  def as(%Ecto.DateTime{} = dt, :iso8601_date),  do: Ecto.DateTime.to_erl(dt) |> as(:iso8601_date)
-  def as(%Ecto.DateTime{} = dt, :iso8601_z),     do: Ecto.DateTime.to_erl(dt) |> as(:iso8601_z)
-  def as(%Ecto.DateTime{} = dt, :rfc1123),       do: new_datetime(Ecto.DateTime.to_erl(dt), @zero_microseconds) |> as(:rfc1123)
-  def as(%Ecto.DateTime{} = dt, :timestamp),     do: as(dt, "%Y%m%d%H%M%S")
-  def as(%Ecto.DateTime{} = dt, spec),           do: Ecto.DateTime.to_erl(dt) |> as(spec)
-
   def as(%Date{} = dt, :date_tuple),     do: Date.to_erl(dt) |> as(:date_tuple)
   def as(%Date{} = dt, :datetime_tuple), do: Date.to_erl(dt) |> as(:datetime_tuple)
   def as(%Date{} = dt, :date),           do: dt
@@ -313,8 +283,6 @@ defmodule Timely do
   def as({{_,_,_}, {_,_,_}} = dt, :datetime_tuple),                  do: dt
   def as({{_,_,_}, {_,_,_}} = {erl, _}, :date),                      do: Date.from_erl(erl) |> process_result_tuple()
   def as({{_,_,_}, {_,_,_}} = dt, :datetime),                        do: new_datetime(dt, @zero_microseconds)
-  def as({{year, month, day}, {_,_,_}}, :ecto_date),                 do: %Ecto.Date{year: year, month: month, day: day}
-  def as({{_,_,_}, {_,_,_}} = dt, :ecto_datetime),                   do: Ecto.DateTime.from_erl(dt)
   def as({{_,_,_}, {_,_,_}} = dt, :iso8601),                         do: new_datetime(dt, @zero_microseconds) |> as(:iso8601)
   def as({{_,_,_}, {_,_,_}, {_,_} = microseconds} = dt, :iso8601),   do: new_datetime(dt, microseconds) |> as(:iso8601)
   def as({{_,_,_}, {_,_,_}} = {erl, _}, :iso8601_date),              do: Date.from_erl(erl) |> process_result_tuple() |> as(:iso8601_date)
@@ -328,8 +296,6 @@ defmodule Timely do
   def as({_,_,_} = dt, :datetime_tuple), do: {dt, {0, 0, 0}}
   def as({_,_,_} = dt, :date),           do: Date.from_erl(dt) |> process_result_tuple()
   def as({_,_,_} = dt, :datetime),       do: new_datetime(as(dt, :datetime_tuple))
-  def as({_,_,_} = dt, :ecto_date),      do: Ecto.Date.from_erl(dt)
-  def as({_,_,_} = dt, :ecto_datetime),  do: Ecto.DateTime.from_erl({dt, {0,0,0}})
   def as({_,_,_} = dt, :iso8601),        do: as(dt, :datetime) |> as(:iso8601)
   def as({_,_,_} = dt, :iso8601_date),   do: as(dt, :date) |> as(:iso8601_date)
   def as({_,_,_} = dt, :iso8601_z),      do: as(dt, :date) |> as(:iso8601_z)

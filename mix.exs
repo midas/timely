@@ -46,10 +46,9 @@ defmodule Timely.Mixfile do
 
   defp deps do
     [
-      {:ecto,  ">= 1.0.0"},
       {:timex, ">= 3.0.0"},
 
-      {:ex_doc, "~> 0.18", only: :dev}
+      {:ex_doc, "~> 0.20", only: :dev}
     ]
   end
 
