@@ -10,7 +10,7 @@ defmodule Timely.TimeZone do
       ]
       ++
       (Tzdata.canonical_zone_list()
-      |> Enum.filter( fn(zone) -> String.starts_with?( zone, "America/" ) end))
+      |> Enum.filter( fn(zone) -> String.starts_with?( zone, "America/") end))
   end
 
   def list( :usa, opts \\ [] ) do
@@ -21,7 +21,9 @@ defmodule Timely.TimeZone do
       est(),
       cst(),
       mst(),
-      pst()
+      pst(),
+      hst(),
+      akst()
     ]
 
     if include_blank?,
@@ -36,5 +38,7 @@ defmodule Timely.TimeZone do
   def cst, do: "America/Chicago"
   def mst, do: "America/Denver"
   def pst, do: "America/Los_Angeles"
+  def hst, do: "Pacific/Honolulu"
+  def akst, do: "US/Alaska"
 
 end
