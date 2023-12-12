@@ -21,7 +21,9 @@ defmodule Timely.TimeZone do
       est(),
       cst(),
       mst(),
-      pst()
+      pst(),
+      hst(),
+      akst()
     ]
 
     if include_blank?,
@@ -36,5 +38,7 @@ defmodule Timely.TimeZone do
   def cst, do: "America/Chicago"
   def mst, do: "America/Denver"
   def pst, do: "America/Los_Angeles"
+  def hst, do: "Pacific/Honolulu"
+  def akst, do: "US/Alaska"
 
 end
